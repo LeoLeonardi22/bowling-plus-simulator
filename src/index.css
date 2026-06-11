@@ -329,10 +329,33 @@ body {
 .msg-stage .msg-display {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  text-align: center;
+  padding: 0;
+}
+
+.msg-display-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.msg-display-inner > .msg-display {
+  flex: 1;
+  border-radius: 0;
+  height: auto;
+}
+
+.msg-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 28px 48px 12px;
   text-align: center;
-  padding: 32px 48px;
 }
 
 .msg-stage .msg-voice {
@@ -346,8 +369,110 @@ body {
 }
 
 .msg-stage .msg-event {
-  margin-top: 16px;
+  margin-top: 12px;
   font-size: 0.72rem;
+}
+
+/* ── Rating bar ──────────────────────────────────────────── */
+.msg-rating {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  background: rgba(0,0,0,0.2);
+  min-height: 48px;
+}
+
+.msg-rating--note {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 10px 24px;
+  gap: 8px;
+}
+
+.rating-label {
+  font-size: 0.72rem;
+  color: #555;
+  flex: 1;
+}
+
+.btn-rate {
+  background: none;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #888;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.btn-rate:hover { background: #2a2a2a; border-color: #555; color: #e0e0e0; }
+.btn-rate.up:hover { border-color: #22c55e; color: #22c55e; }
+.btn-rate.down:hover { border-color: #f97316; color: #f97316; }
+.btn-rate.cancel { font-size: 0.75rem; color: #555; }
+
+.rating-badge {
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #888;
+  flex: 1;
+}
+
+.rating-badge.up { color: #22c55e; }
+.rating-badge.down { color: #f97316; }
+
+.rating-note-preview {
+  font-size: 0.75rem;
+  color: #666;
+  font-style: italic;
+  max-width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rating-edit {
+  background: none;
+  border: none;
+  font-size: 0.7rem;
+  color: #444;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.rating-textarea {
+  width: 100%;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-size: 0.8rem;
+  padding: 8px;
+  resize: none;
+  font-family: inherit;
+}
+
+.rating-textarea:focus { outline: none; border-color: #7c3aed; }
+
+.rating-note-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* log feedback badge */
+.log-fb-badge {
+  font-size: 0.75rem;
+  margin-left: auto;
+  opacity: 0.8;
+}
+
+.btn-export-feedback {
+  border-color: #7c3aed !important;
+  color: #a78bfa !important;
 }
 
 /* ── Message display ─────────────────────────────────────── */

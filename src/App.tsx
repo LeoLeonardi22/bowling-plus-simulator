@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import type { GameState, MessageEntry, LogEntry, IncipitEntry } from './engine/types';
 import { buildFrames, isGameOver, maxPinsSecondThrow } from './engine/scoring';
 import { buildContext } from './engine/context';
@@ -12,6 +12,8 @@ import Scorecard from './components/Scorecard';
 import ThrowInput from './components/ThrowInput';
 import MessageDisplay from './components/MessageDisplay';
 import MessageLog from './components/MessageLog';
+import MessageRating from './components/MessageRating';
+import type { FeedbackEntry } from './components/MessageRating';
 import './index.css';
 
 function initialState(): GameState {
@@ -41,6 +43,25 @@ function download(filename: string, content: string) {
 export default function App() {
   const [state, setState] = useState<GameState>(initialState);
   const [showTip, setShowTip] = useState(false);
+  const [feedbackMap, setFeedbackMap] = useState<Record<number, FeedbackEntry>>({});
+
+  const handleFeedback = useCallback((id: number, rating: 'up' | 'down', note: string) => {
+    setFeedbackMap(prev => ({ ...prev, [id]: { rating, note } }));
+  }, []);
+
+  const currentEntryId = useMemo(() => {
+    const log = state.messageLog;
+    if (!log.length) return null;
+    if (showTip || state.incipitMessage) {
+      for (let i = log.length - 1; i >= 0; i--) {
+        if (log[i].kind === 'tip' || log[i].kind === 'incipit') return log[i].timestamp;
+      }
+    }
+    for (let i = log.length - 1; i >= 0; i--) {
+      if (log[i].kind === 'message') return log[i].timestamp;
+    }
+    return null;
+  }, [state.messageLog, showTip, state.incipitMessage]);
 
   useEffect(() => {
     if (state.pendingTip) {
@@ -108,7 +129,32 @@ export default function App() {
     resetTips();
     resetIncipits();
     setState(initialState());
+    setFeedbackMap({});
   }, []);
+
+  const exportFeedback = useCallback(() => {
+    const entries = state.messageLog
+      .filter(e => feedbackMap[e.timestamp])
+      .map(e => {
+        const fb = feedbackMap[e.timestamp];
+        const base = { timestamp: e.timestamp, kind: e.kind, rating: fb.rating, note: fb.note };
+        if (e.kind === 'message') {
+          return {
+            ...base,
+            eventType: e.event.type,
+            text: e.message.text,
+            voice: e.message.voice,
+            variant: e.message.variant,
+            context: e.event.context,
+          };
+        }
+        if (e.kind === 'tip') return { ...base, text: e.text, frameNumber: e.frameNumber };
+        if (e.kind === 'incipit') return { ...base, text: e.text, frameNumber: e.frameNumber };
+        return base;
+      });
+    const content = JSON.stringify({ session: new Date().toISOString(), feedback: entries }, null, 2);
+    download('bowling-feedback.json', content);
+  }, [state.messageLog, feedbackMap]);
 
   const handleContinue = useCallback(() => {
     setShowTip(false);
@@ -219,17 +265,32 @@ export default function App() {
           <div className="msg-stage">
             {showTip && state.pendingTip ? (
               <div key={displayKey} className="msg-display voice-tip msg-slide">
-                <span className="msg-voice">Consiglio</span>
-                <p className="msg-text">{state.pendingTip}</p>
+                <div className="msg-content">
+                  <span className="msg-voice">Consiglio</span>
+                  <p className="msg-text">{state.pendingTip}</p>
+                </div>
+                {currentEntryId !== null && (
+                  <MessageRating entryId={currentEntryId} existing={feedbackMap[currentEntryId]} onRate={handleFeedback} />
+                )}
               </div>
             ) : state.incipitMessage ? (
               <div key={displayKey} className="msg-display voice-incipit msg-slide">
-                <span className="msg-voice">Prossimo frame</span>
-                <p className="msg-text">{state.incipitMessage}</p>
+                <div className="msg-content">
+                  <span className="msg-voice">Prossimo frame</span>
+                  <p className="msg-text">{state.incipitMessage}</p>
+                </div>
+                {currentEntryId !== null && (
+                  <MessageRating entryId={currentEntryId} existing={feedbackMap[currentEntryId]} onRate={handleFeedback} />
+                )}
               </div>
             ) : (
               <div key={displayKey} className="msg-slide">
-                <MessageDisplay message={state.lastMessage} />
+                <div className="msg-display-inner">
+                  <MessageDisplay message={state.lastMessage} />
+                  {currentEntryId !== null && state.lastMessage && (
+                    <MessageRating entryId={currentEntryId} existing={feedbackMap[currentEntryId]} onRate={handleFeedback} />
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -287,10 +348,13 @@ export default function App() {
             <button className="btn btn-export" onClick={() => navigator.clipboard.writeText(generateCSharp())}>
               Copia C# negli appunti
             </button>
+            <button className="btn btn-export btn-export-feedback" onClick={exportFeedback}>
+              Esporta feedback
+            </button>
           </div>
         </section>
 
-        <MessageLog log={state.messageLog} />
+        <MessageLog log={state.messageLog} feedbackMap={feedbackMap} />
       </main>
     </div>
   );
