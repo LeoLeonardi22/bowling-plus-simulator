@@ -84,6 +84,11 @@ body {
   min-width: 72px;
 }
 
+.sc-frame-hdr.active {
+  color: #a78bfa;
+  font-weight: 700;
+}
+
 .sc-total-hdr {
   width: 52px;
   min-width: 52px;
@@ -103,6 +108,12 @@ body {
 .sc-frame.frame10 {
   flex: 1.5;
   min-width: 72px;
+}
+
+.sc-frame.active {
+  border-left: 2px solid #7c3aed;
+  border-right: 2px solid #7c3aed;
+  background: #1f1535;
 }
 
 .sc-rolls {
@@ -289,6 +300,56 @@ body {
   margin-bottom: 20px;
 }
 
+/* ── Message stage (16:9, slide animation) ───────────────── */
+.msg-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+@keyframes slideInFromRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+.msg-slide {
+  position: absolute;
+  inset: 0;
+  animation: slideInFromRight 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.msg-slide > .msg-display {
+  height: 100%;
+  border-radius: 0;
+}
+
+/* centrato e grande dentro il 16:9 */
+.msg-stage .msg-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 48px;
+}
+
+.msg-stage .msg-voice {
+  font-size: 0.75rem;
+  margin-bottom: 16px;
+}
+
+.msg-stage .msg-text {
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  line-height: 1.4;
+}
+
+.msg-stage .msg-event {
+  margin-top: 16px;
+  font-size: 0.72rem;
+}
+
 /* ── Message display ─────────────────────────────────────── */
 .msg-display {
   padding: 16px 20px;
@@ -318,6 +379,16 @@ body {
   background: #000e1e;
 }
 
+.msg-display.voice-tip {
+  border-color: #3b2070;
+  background: #1a0d35;
+}
+
+.msg-display.voice-incipit {
+  border-color: #1e4d2b;
+  background: #071510;
+}
+
 .msg-voice {
   font-size: 0.65rem;
   text-transform: uppercase;
@@ -331,6 +402,8 @@ body {
 .voice-reactive .msg-voice   { color: #f97316; }
 .voice-encouraging .msg-voice { color: #22c55e; }
 .voice-educational .msg-voice { color: #60a5fa; }
+.voice-tip .msg-voice         { color: #a78bfa; }
+.voice-incipit .msg-voice     { color: #34d399; }
 
 .msg-text {
   font-size: 1.05rem;
@@ -416,6 +489,10 @@ body {
 .log-entry.voice-reactive    { border-left: 2px solid #f97316; }
 .log-entry.voice-encouraging { border-left: 2px solid #22c55e; }
 .log-entry.voice-educational { border-left: 2px solid #60a5fa; }
+.log-entry.log-entry-tip         { border-left: 2px solid #a78bfa; background: #120820; }
+.log-entry.log-entry-tip .log-event { color: #a78bfa; }
+.log-entry.log-entry-incipit         { border-left: 2px solid #34d399; background: #071510; }
+.log-entry.log-entry-incipit .log-event { color: #34d399; }
 
 .log-frame {
   color: #555;

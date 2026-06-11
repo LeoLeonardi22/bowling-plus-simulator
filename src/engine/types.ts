@@ -73,10 +73,27 @@ export interface GameEvent {
 }
 
 export interface MessageEntry {
+  kind: 'message';
   event: GameEvent;
   message: Message;
   timestamp: number;
 }
+
+export interface TipEntry {
+  kind: 'tip';
+  text: string;
+  frameNumber: number;
+  timestamp: number;
+}
+
+export interface IncipitEntry {
+  kind: 'incipit';
+  text: string;
+  frameNumber: number;
+  timestamp: number;
+}
+
+export type LogEntry = MessageEntry | TipEntry | IncipitEntry;
 
 export interface GameState {
   frames: Frame[];
@@ -86,8 +103,9 @@ export interface GameState {
   isGameOver: boolean;
   finalScore: number | null;
   context: GameContext;
-  messageLog: MessageEntry[];
+  messageLog: LogEntry[];
   lastEvent: GameEvent | null;
   lastMessage: Message | null;
   pendingTip: string | null;
+  incipitMessage: string | null;
 }

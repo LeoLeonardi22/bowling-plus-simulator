@@ -1,14 +1,14 @@
-import { useState, useCallback } from 'react';
-import type { GameState, MessageEntry } from './engine/types';
+import { useState, useCallback, useEffect } from 'react';
+import type { GameState, MessageEntry, LogEntry, IncipitEntry } from './engine/types';
 import { buildFrames, isGameOver, maxPinsSecondThrow } from './engine/scoring';
 import { buildContext } from './engine/context';
 import { detectEvent } from './engine/events';
 import { selectMessage, resetPipeline } from './engine/pipeline';
 import { getNextTip, resetTips } from './engine/tips';
+import { getIncipit, resetIncipits } from './engine/incipits';
 import { generateCSharp } from './generators/csharp';
 import { generateJSON } from './generators/json';
 import Scorecard from './components/Scorecard';
-import TipCard from './components/TipCard';
 import ThrowInput from './components/ThrowInput';
 import MessageDisplay from './components/MessageDisplay';
 import MessageLog from './components/MessageLog';
@@ -27,6 +27,7 @@ function initialState(): GameState {
     lastEvent: null,
     lastMessage: null,
     pendingTip: null,
+    incipitMessage: null,
   };
 }
 
@@ -39,6 +40,17 @@ function download(filename: string, content: string) {
 
 export default function App() {
   const [state, setState] = useState<GameState>(initialState);
+  const [showTip, setShowTip] = useState(false);
+
+  useEffect(() => {
+    if (state.pendingTip) {
+      setShowTip(false);
+      const timer = setTimeout(() => setShowTip(true), 4000);
+      return () => clearTimeout(timer);
+    } else {
+      setShowTip(false);
+    }
+  }, [state.pendingTip]);
 
   const processThrow = useCallback((pins: number, isSplit = false) => {
     setState(prev => {
@@ -66,10 +78,13 @@ export default function App() {
       const event = detectEvent(pins, context);
       const message = selectMessage(event);
       const gameOver = isGameOver(newThrows);
-      const entry: MessageEntry = { event, message, timestamp: Date.now() };
+      const entry: MessageEntry = { kind: 'message', event, message, timestamp: Date.now() };
 
       const frameJustCompleted = nextFrame > prev.currentFrame;
-      const pendingTip = frameJustCompleted && !gameOver ? getNextTip() : null;
+      const tipText = frameJustCompleted && !gameOver ? getNextTip() : null;
+      const tipEntry: LogEntry[] = tipText
+        ? [{ kind: 'tip', text: tipText, frameNumber: prev.currentFrame, timestamp: Date.now() + 1 }]
+        : [];
 
       return {
         frames,
@@ -79,10 +94,11 @@ export default function App() {
         isGameOver: gameOver,
         finalScore: gameOver ? (frames[9].cumulative ?? null) : null,
         context: buildContext(frames, nextFrame, nextThrow, false, 0),
-        messageLog: [...prev.messageLog, entry],
+        messageLog: [...prev.messageLog, entry, ...tipEntry],
         lastEvent: event,
         lastMessage: message,
-        pendingTip,
+        pendingTip: tipText,
+        incipitMessage: null,
       };
     });
   }, []);
@@ -90,16 +106,37 @@ export default function App() {
   const handleReset = useCallback(() => {
     resetPipeline();
     resetTips();
+    resetIncipits();
     setState(initialState());
   }, []);
 
   const handleContinue = useCallback(() => {
-    setState(prev => ({ ...prev, pendingTip: null }));
+    setShowTip(false);
+    setState(prev => {
+      const completedFrame = prev.frames[prev.currentFrame - 2];
+      const prevResult = completedFrame?.isStrike ? 'strike'
+        : completedFrame?.isSpare ? 'spare'
+        : 'open';
+      const incipitText = getIncipit(prevResult, prev.currentFrame);
+      const incipitEntry: IncipitEntry = {
+        kind: 'incipit',
+        text: incipitText,
+        frameNumber: prev.currentFrame,
+        timestamp: Date.now(),
+      };
+      return {
+        ...prev,
+        pendingTip: null,
+        incipitMessage: incipitText,
+        messageLog: [...prev.messageLog, incipitEntry],
+      };
+    });
   }, []);
 
   const handleAutoSimulate = useCallback(() => {
     resetPipeline();
     resetTips();
+    resetIncipits();
 
     // Simple sequential simulation
     let throws: number[] = [];
@@ -145,15 +182,22 @@ export default function App() {
         isGameOver: gameOver,
         finalScore: gameOver ? (frames[9].cumulative ?? null) : null,
         context: buildContext(frames, nextFrame, nextThrow, false, 0),
-        messageLog: [...newState.messageLog, { event, message, timestamp: Date.now() }],
+        messageLog: [...newState.messageLog, { kind: 'message' as const, event, message, timestamp: Date.now() }],
         lastEvent: event,
         lastMessage: message,
         pendingTip: null,
+        incipitMessage: null,
       };
       if (gameOver) break;
     }
     setState(newState);
   }, []);
+
+  const displayKey = showTip
+    ? `tip-${state.currentFrame}`
+    : state.incipitMessage
+      ? `incipit-${state.currentFrame}`
+      : `msg-${state.lastMessage?.id ?? 'empty'}`;
 
   const currentFrameData = state.frames[state.currentFrame - 1];
   const isFirstThrow = state.throwInFrame === 1;
@@ -171,18 +215,37 @@ export default function App() {
       </header>
 
       <main className="app-main">
+        <section className="section-message">
+          <div className="msg-stage">
+            {showTip && state.pendingTip ? (
+              <div key={displayKey} className="msg-display voice-tip msg-slide">
+                <span className="msg-voice">Consiglio</span>
+                <p className="msg-text">{state.pendingTip}</p>
+              </div>
+            ) : state.incipitMessage ? (
+              <div key={displayKey} className="msg-display voice-incipit msg-slide">
+                <span className="msg-voice">Prossimo frame</span>
+                <p className="msg-text">{state.incipitMessage}</p>
+              </div>
+            ) : (
+              <div key={displayKey} className="msg-slide">
+                <MessageDisplay message={state.lastMessage} />
+              </div>
+            )}
+          </div>
+        </section>
+
         <section className="section-scorecard">
-          <Scorecard frames={state.frames} />
+          <Scorecard frames={state.frames} currentFrame={state.currentFrame} />
         </section>
 
         {!state.isGameOver ? (
           <section className="section-input">
-            {state.pendingTip ? (
-              <TipCard
-                tip={state.pendingTip}
-                frameNumber={state.currentFrame - 1}
-                onContinue={handleContinue}
-              />
+            {showTip ? (
+              <div className="controls">
+                <button className="btn btn-continue" onClick={handleContinue}>Prossimo frame →</button>
+                <button className="btn btn-reset" onClick={handleReset}>Reset</button>
+              </div>
             ) : (
               <>
                 <div className="turn-info">
@@ -191,7 +254,7 @@ export default function App() {
                 <ThrowInput
                   maxPins={maxPins}
                   onThrow={processThrow}
-                  disabled={state.isGameOver}
+                  disabled={state.isGameOver || !!state.pendingTip}
                   isSplitPossible={!isFirstThrow && state.currentFrame < 10}
                 />
                 <div className="controls">
@@ -211,10 +274,6 @@ export default function App() {
             </div>
           </section>
         )}
-
-        <section className="section-message">
-          <MessageDisplay message={state.lastMessage} />
-        </section>
 
         <section className="section-export">
           <h3>Esporta per Unity</h3>

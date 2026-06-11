@@ -1,6 +1,6 @@
 import type { Frame } from '../engine/types';
 
-interface Props { frames: Frame[]; }
+interface Props { frames: Frame[]; currentFrame: number; }
 
 function symbol(throws: number[], idx: number, frameIdx: number): string {
   const v = throws[idx];
@@ -19,13 +19,13 @@ function symbol(throws: number[], idx: number, frameIdx: number): string {
   }
 }
 
-export default function Scorecard({ frames }: Props) {
+export default function Scorecard({ frames, currentFrame }: Props) {
   return (
     <div className="scorecard">
       <div className="sc-header">
         <div className="sc-name">Player</div>
         {frames.map((f, i) => (
-          <div key={i} className={`sc-frame-hdr ${i === 9 ? 'frame10' : ''}`}>{f.frameNumber}</div>
+          <div key={i} className={`sc-frame-hdr ${i === 9 ? 'frame10' : ''} ${i + 1 === currentFrame ? 'active' : ''}`}>{f.frameNumber}</div>
         ))}
         <div className="sc-total-hdr">TOTAL</div>
       </div>
@@ -33,7 +33,7 @@ export default function Scorecard({ frames }: Props) {
       <div className="sc-row">
         <div className="sc-name-cell">—</div>
         {frames.map((f, fi) => (
-          <div key={fi} className={`sc-frame ${fi === 9 ? 'frame10' : ''}`}>
+          <div key={fi} className={`sc-frame ${fi === 9 ? 'frame10' : ''} ${fi + 1 === currentFrame ? 'active' : ''}`}>
             <div className="sc-rolls">
               {fi === 9
                 ? [0, 1, 2].map(i => <span key={i} className="sc-roll">{symbol(f.throws, i, fi)}</span>)
