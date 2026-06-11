@@ -4,9 +4,11 @@ import { buildFrames, isGameOver, maxPinsSecondThrow } from './engine/scoring';
 import { buildContext } from './engine/context';
 import { detectEvent } from './engine/events';
 import { selectMessage, resetPipeline } from './engine/pipeline';
+import { getNextTip, resetTips } from './engine/tips';
 import { generateCSharp } from './generators/csharp';
 import { generateJSON } from './generators/json';
 import Scorecard from './components/Scorecard';
+import TipCard from './components/TipCard';
 import ThrowInput from './components/ThrowInput';
 import MessageDisplay from './components/MessageDisplay';
 import MessageLog from './components/MessageLog';
@@ -24,6 +26,7 @@ function initialState(): GameState {
     messageLog: [],
     lastEvent: null,
     lastMessage: null,
+    pendingTip: null,
   };
 }
 
@@ -65,6 +68,9 @@ export default function App() {
       const gameOver = isGameOver(newThrows);
       const entry: MessageEntry = { event, message, timestamp: Date.now() };
 
+      const frameJustCompleted = nextFrame > prev.currentFrame;
+      const pendingTip = frameJustCompleted && !gameOver ? getNextTip() : null;
+
       return {
         frames,
         allThrows: newThrows,
@@ -76,17 +82,24 @@ export default function App() {
         messageLog: [...prev.messageLog, entry],
         lastEvent: event,
         lastMessage: message,
+        pendingTip,
       };
     });
   }, []);
 
   const handleReset = useCallback(() => {
     resetPipeline();
+    resetTips();
     setState(initialState());
+  }, []);
+
+  const handleContinue = useCallback(() => {
+    setState(prev => ({ ...prev, pendingTip: null }));
   }, []);
 
   const handleAutoSimulate = useCallback(() => {
     resetPipeline();
+    resetTips();
 
     // Simple sequential simulation
     let throws: number[] = [];
@@ -135,6 +148,7 @@ export default function App() {
         messageLog: [...newState.messageLog, { event, message, timestamp: Date.now() }],
         lastEvent: event,
         lastMessage: message,
+        pendingTip: null,
       };
       if (gameOver) break;
     }
@@ -163,19 +177,29 @@ export default function App() {
 
         {!state.isGameOver ? (
           <section className="section-input">
-            <div className="turn-info">
-              Frame <strong>{state.currentFrame}</strong> · Tiro <strong>{state.throwInFrame}</strong>
-            </div>
-            <ThrowInput
-              maxPins={maxPins}
-              onThrow={processThrow}
-              disabled={state.isGameOver}
-              isSplitPossible={!isFirstThrow && state.currentFrame < 10}
-            />
-            <div className="controls">
-              <button className="btn btn-simulate" onClick={handleAutoSimulate}>Auto-simula</button>
-              <button className="btn btn-reset" onClick={handleReset}>Reset</button>
-            </div>
+            {state.pendingTip ? (
+              <TipCard
+                tip={state.pendingTip}
+                frameNumber={state.currentFrame - 1}
+                onContinue={handleContinue}
+              />
+            ) : (
+              <>
+                <div className="turn-info">
+                  Frame <strong>{state.currentFrame}</strong> · Tiro <strong>{state.throwInFrame}</strong>
+                </div>
+                <ThrowInput
+                  maxPins={maxPins}
+                  onThrow={processThrow}
+                  disabled={state.isGameOver}
+                  isSplitPossible={!isFirstThrow && state.currentFrame < 10}
+                />
+                <div className="controls">
+                  <button className="btn btn-simulate" onClick={handleAutoSimulate}>Auto-simula</button>
+                  <button className="btn btn-reset" onClick={handleReset}>Reset</button>
+                </div>
+              </>
+            )}
           </section>
         ) : (
           <section className="section-gameover">

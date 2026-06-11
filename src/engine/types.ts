@@ -89,4 +89,5 @@ export interface GameState {
   messageLog: MessageEntry[];
   lastEvent: GameEvent | null;
   lastMessage: Message | null;
+  pendingTip: string | null;
 }

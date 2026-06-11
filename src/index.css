@@ -444,6 +444,37 @@ body {
   padding: 16px 20px;
 }
 
+/* ── Tip card ────────────────────────────────────────────── */
+.tip-card {
+  padding: 20px 24px;
+  border-radius: 8px;
+  border: 1px solid #3b2070;
+  background: #1a0d35;
+}
+
+.tip-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: #a78bfa;
+  margin-bottom: 10px;
+}
+
+.tip-text {
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.btn-continue {
+  background: #7c3aed;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+}
+
 /* ── Scrollbar ───────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #111; }
