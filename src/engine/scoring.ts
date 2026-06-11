@@ -91,7 +91,7 @@ export function buildFrames(throws: number[]): Frame[] {
         cumulative: cumulative[f],
         isStrike: true,
         isSpare: false,
-        isComplete: frameScores[f] !== null,
+        isComplete: true,
       });
       i += 1;
       continue;
