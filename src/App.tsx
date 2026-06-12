@@ -53,7 +53,8 @@ export default function App() {
   const handleFeedback = useCallback((id: number, rating: 'up' | 'down', note: string) => {
     setFeedbackMap(prev => ({ ...prev, [id]: { rating, note } }));
     const entry = messageLogRef.current.find(e => e.timestamp === id);
-    if (!entry || !supabase) return;
+    if (!supabase) { console.warn('[Supabase] client null — env vars mancanti'); return; }
+    if (!entry) return;
     const row: Record<string, unknown> = {
       session_id: sessionId,
       kind: entry.kind,
@@ -73,7 +74,10 @@ export default function App() {
       row.frame_number = (entry as { frameNumber: number }).frameNumber;
       row.text         = (entry as { text: string }).text;
     }
-    supabase.from('feedback').insert(row);
+    supabase.from('feedback').insert(row).then(({ error }) => {
+      if (error) console.error('[Supabase feedback]', error.message, error.details);
+      else console.log('[Supabase feedback] saved', row.event_type ?? row.kind);
+    });
   }, [sessionId]);
 
   const currentEntryId = useMemo(() => {
