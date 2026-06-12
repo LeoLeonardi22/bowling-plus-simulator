@@ -9,7 +9,6 @@ import { getIncipit, resetIncipits } from './engine/incipits';
 import { generateCSharp } from './generators/csharp';
 import { generateJSON } from './generators/json';
 import { supabase } from './lib/supabase';
-import { MESSAGES } from './data/messages';
 import Scorecard from './components/Scorecard';
 import ThrowInput from './components/ThrowInput';
 import MessageDisplay from './components/MessageDisplay';
@@ -95,14 +94,12 @@ export default function App() {
   }, [state.messageLog, showTip, state.incipitMessage]);
 
   useEffect(() => {
-    if (state.pendingTip) {
-      setShowTip(false);
-      const timer = setTimeout(() => setShowTip(true), 4000);
-      return () => clearTimeout(timer);
-    } else {
-      setShowTip(false);
-    }
+    setShowTip(false);
   }, [state.pendingTip]);
+
+  const handleShowTip = useCallback(() => {
+    setShowTip(true);
+  }, []);
 
   const processThrow = useCallback((pins: number, isSplit = false) => {
     setState(prev => {
@@ -163,115 +160,6 @@ export default function App() {
     setFeedbackMap({});
   }, []);
 
-  const handleNewVersion = useCallback(async () => {
-    if (!supabase) { alert('Supabase non configurato.'); return; }
-    const notes = window.prompt('Note per questa versione (cosa è cambiato):') ?? '';
-    const { error } = await supabase.from('pipeline_versions').insert({
-      notes,
-      messages_snapshot: MESSAGES,
-    });
-    if (error) { alert('Errore: ' + error.message); return; }
-    alert('Versione salvata.');
-  }, []);
-
-  const handleGenerateBrief = useCallback(async () => {
-    if (!supabase) { download('brief-claude.md', '# Supabase non configurato'); return; }
-
-    const { data: versions } = await supabase
-      .from('pipeline_versions')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(1);
-
-    const lastVersion = versions?.[0] ?? null;
-    const lastDate = lastVersion?.created_at ?? '1970-01-01';
-
-    const { data: rawFeedback } = await supabase
-      .from('feedback')
-      .select('*')
-      .gt('created_at', lastDate)
-      .eq('rating', 'down')
-      .order('event_type');
-
-    const pending = rawFeedback ?? [];
-
-    // raggruppa per event_type
-    const grouped: Record<string, typeof pending> = {};
-    for (const f of pending) {
-      const key = f.event_type ?? f.kind;
-      if (!grouped[key]) grouped[key] = [];
-      grouped[key].push(f);
-    }
-
-    const msgByEvent: Record<string, string[]> = {};
-    for (const m of MESSAGES) {
-      if (!msgByEvent[m.eventType]) msgByEvent[m.eventType] = [];
-      msgByEvent[m.eventType].push(`  v${m.variant} [${m.voice}]: "${m.text}"`);
-    }
-
-    let md = `# Bowling Plus — Brief per Claude\n\n`;
-    md += `Data: ${new Date().toLocaleDateString('it-IT')}\n`;
-    md += `Ultima versione pipeline: ${lastVersion ? `v${lastVersion.version_number} del ${new Date(lastVersion.created_at).toLocaleDateString('it-IT')}` : 'nessuna versione salvata'}\n\n`;
-    md += `---\n\n## Progetto\n\nSimulatore della pipeline di messaggi per piste da bowling.\n`;
-    md += `Stack: Vite + React + TypeScript. Repo: https://github.com/LeoLeonardi22/bowling-plus-simulator\n\n`;
-    md += `La pipeline ha 25 EventType × 3 varianti (reactive/encouraging/educational).\n`;
-    md += `Ogni messaggio si attiva in base a EventType + GameContext (frame, throw, streak, phase, ecc.).\n\n`;
-    md += `---\n\n## Feedback negativi non ancora processati (${pending.length} totali)\n\n`;
-
-    if (pending.length === 0) {
-      md += '_Nessun feedback negativo dal ultimo aggiornamento._\n\n';
-    } else {
-      for (const [key, items] of Object.entries(grouped)) {
-        md += `### ${key} (${items.length} voti)\n\n`;
-        if (msgByEvent[key]) {
-          md += `**Messaggi attuali:**\n${msgByEvent[key].join('\n')}\n\n`;
-        }
-        md += `**Feedback:**\n`;
-        for (const f of items) {
-          const ctx = f.context ?? {};
-          md += `- Frame ${f.frame_number ?? '?'}, Tiro ${f.throw_in_frame ?? '?'}, Pins ${f.pins ?? '?'}`;
-          if (ctx.phase) md += `, fase ${ctx.phase}`;
-          if (ctx.streakStrike) md += `, streak strike ${ctx.streakStrike}`;
-          if (ctx.prevFrameResult) md += `, prev ${ctx.prevFrameResult}`;
-          if (f.note) md += `\n  _"${f.note}"_`;
-          md += '\n';
-        }
-        md += '\n';
-      }
-    }
-
-    md += `---\n\n## Istruzioni per Claude\n\n`;
-    md += `1. Analizza i feedback negativi sopra — per ogni EventType problematico riscrivi le varianti coinvolte.\n`;
-    md += `2. Considera il contesto (frame, tiro, streak, phase) per capire perché il messaggio era incoerente.\n`;
-    md += `3. Modifica \`src/data/messages.ts\` con i nuovi testi.\n`;
-    md += `4. Dopo le modifiche, clicca "Nuova versione pipeline" nel simulatore per registrare il checkpoint.\n`;
-
-    download('brief-claude.md', md);
-  }, []);
-
-  const exportFeedback = useCallback(() => {
-    const entries = state.messageLog
-      .filter(e => feedbackMap[e.timestamp])
-      .map(e => {
-        const fb = feedbackMap[e.timestamp];
-        const base = { timestamp: e.timestamp, kind: e.kind, rating: fb.rating, note: fb.note };
-        if (e.kind === 'message') {
-          return {
-            ...base,
-            eventType: e.event.type,
-            text: e.message.text,
-            voice: e.message.voice,
-            variant: e.message.variant,
-            context: e.event.context,
-          };
-        }
-        if (e.kind === 'tip') return { ...base, text: e.text, frameNumber: e.frameNumber };
-        if (e.kind === 'incipit') return { ...base, text: e.text, frameNumber: e.frameNumber };
-        return base;
-      });
-    const content = JSON.stringify({ session: new Date().toISOString(), feedback: entries }, null, 2);
-    download('bowling-feedback.json', content);
-  }, [state.messageLog, feedbackMap]);
 
   const handleContinue = useCallback(() => {
     setShowTip(false);
@@ -424,6 +312,11 @@ export default function App() {
                 <button className="btn btn-continue" onClick={handleContinue}>Prossimo frame →</button>
                 <button className="btn btn-reset" onClick={handleReset}>Reset</button>
               </div>
+            ) : state.pendingTip ? (
+              <div className="controls">
+                <button className="btn btn-continue" onClick={handleShowTip}>Prossimo messaggio →</button>
+                <button className="btn btn-reset" onClick={handleReset}>Reset</button>
+              </div>
             ) : (
               <>
                 <div className="turn-info">
@@ -464,15 +357,6 @@ export default function App() {
             </button>
             <button className="btn btn-export" onClick={() => navigator.clipboard.writeText(generateCSharp())}>
               Copia C# negli appunti
-            </button>
-            <button className="btn btn-export btn-export-feedback" onClick={exportFeedback}>
-              Esporta feedback
-            </button>
-            <button className="btn btn-export btn-version" onClick={handleNewVersion}>
-              Nuova versione pipeline
-            </button>
-            <button className="btn btn-export btn-brief" onClick={handleGenerateBrief}>
-              Genera brief per Claude
             </button>
           </div>
         </section>
