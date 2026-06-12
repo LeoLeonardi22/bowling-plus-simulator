@@ -142,7 +142,7 @@ export default function App() {
         throwInFrame: nextThrow,
         isGameOver: gameOver,
         finalScore: gameOver ? (frames[9].cumulative ?? null) : null,
-        context: buildContext(frames, nextFrame, nextThrow, false, 0),
+        context: buildContext(frames, nextFrame, nextThrow, false, nextFrame === prev.currentFrame ? pins : 0),
         messageLog: [...prev.messageLog, entry, ...tipEntry],
         lastEvent: event,
         lastMessage: message,

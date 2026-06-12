@@ -12,12 +12,12 @@ export const MESSAGES: Message[] = [
   { id: 'gr3', eventType: 'GUTTER_REPEATED', variant: 3, voice: 'educational', text: 'Prova a tenere la palla più al centro della pista.' },
 
   // LOW_1_3
-  { id: 'l1', eventType: 'LOW_1_3', variant: 1, voice: 'reactive',    text: 'Un inizio cauto, il secondo tiro può cambiare tutto.' },
+  { id: 'l1', eventType: 'LOW_1_3', variant: 1, voice: 'reactive',    text: 'Pochi pin al primo tiro — il secondo è tutto tuo.' },
   { id: 'l2', eventType: 'LOW_1_3', variant: 2, voice: 'encouraging', text: 'Ne sono rimasti tanti, prendi bene la mira.' },
   { id: 'l3', eventType: 'LOW_1_3', variant: 3, voice: 'educational', text: 'Ogni birillo conta — la somma dei due tiri è il tuo punteggio del frame.' },
 
   // MEDIUM_4_6
-  { id: 'm1', eventType: 'MEDIUM_4_6', variant: 1, voice: 'reactive',    text: 'Buon tiro! Sei a metà strada.' },
+  { id: 'm1', eventType: 'MEDIUM_4_6', variant: 1, voice: 'reactive',    text: 'Buona base — punta a chiudere con lo spare.' },
   { id: 'm2', eventType: 'MEDIUM_4_6', variant: 2, voice: 'encouraging', text: 'Ora punta ai restanti, lo spare è possibile.' },
   { id: 'm3', eventType: 'MEDIUM_4_6', variant: 3, voice: 'educational', text: 'Se chiudi con uno spare, il frame vale 10 più il tiro successivo.' },
 
@@ -33,7 +33,7 @@ export const MESSAGES: Message[] = [
 
   // STRIKE_FIRST
   { id: 'sf1', eventType: 'STRIKE_FIRST', variant: 1, voice: 'reactive',    text: 'STRIKE! Tutti e 10 al primo colpo!' },
-  { id: 'sf2', eventType: 'STRIKE_FIRST', variant: 2, voice: 'encouraging', text: 'Partenza perfetta, il gioco è tuo!' },
+  { id: 'sf2', eventType: 'STRIKE_FIRST', variant: 2, voice: 'encouraging', text: 'Tutto giù! Il punteggio cresce con i prossimi due tiri.' },
   { id: 'sf3', eventType: 'STRIKE_FIRST', variant: 3, voice: 'educational', text: 'Lo strike vale 10 più i prossimi 2 tiri — il frame resta aperto, il punteggio arriva dopo.' },
 
   // STRIKE_DOUBLE
@@ -52,7 +52,7 @@ export const MESSAGES: Message[] = [
   { id: 'sm3', eventType: 'STRIKE_MULTI', variant: 3, voice: 'educational', text: 'Il tuo punteggio sta crescendo in modo straordinario — ogni frame vale tantissimo.' },
 
   // STRIKE_COMEBACK
-  { id: 'sc1', eventType: 'STRIKE_COMEBACK', variant: 1, voice: 'reactive',    text: 'Eccolo! Primo strike — adesso il gioco cambia.' },
+  { id: 'sc1', eventType: 'STRIKE_COMEBACK', variant: 1, voice: 'reactive',    text: 'Strike! Bentornato — adesso il gioco cambia.' },
   { id: 'sc2', eventType: 'STRIKE_COMEBACK', variant: 2, voice: 'encouraging', text: 'Rimonta in corso, ottimo momento!' },
   { id: 'sc3', eventType: 'STRIKE_COMEBACK', variant: 3, voice: 'educational', text: 'Uno strike dopo frame aperti recupera terreno velocemente nel punteggio cumulativo.' },
 
@@ -72,8 +72,8 @@ export const MESSAGES: Message[] = [
   { id: 'ms3', eventType: 'MISSED_SPARE', variant: 3, voice: 'educational', text: 'Senza spare il frame vale solo i birilli del primo tiro — nessun bonus.' },
 
   // OPEN_FRAME
-  { id: 'of1', eventType: 'OPEN_FRAME', variant: 1, voice: 'reactive',    text: 'Buon secondo tiro, prossimo frame!' },
-  { id: 'of2', eventType: 'OPEN_FRAME', variant: 2, voice: 'encouraging', text: 'Ogni frame è una nuova occasione.' },
+  { id: 'of1', eventType: 'OPEN_FRAME', variant: 1, voice: 'reactive',    text: 'Frame chiuso. Al prossimo si riparte.' },
+  { id: 'of2', eventType: 'OPEN_FRAME', variant: 2, voice: 'encouraging', text: 'Nessun bonus questa volta — riparte tutto dal prossimo frame.' },
   { id: 'of3', eventType: 'OPEN_FRAME', variant: 3, voice: 'educational', text: 'Senza spare il punteggio è la somma dei due tiri — nessun bonus, ma conta lo stesso.' },
 
   // SPARE_FIRST
@@ -102,7 +102,7 @@ export const MESSAGES: Message[] = [
   { id: 'f10s3', eventType: 'FRAME10_START', variant: 3, voice: 'educational', text: 'Al frame 10 non ci sono bonus: ogni tiro vale esattamente i birilli che abbatti.' },
 
   // FRAME10_STRIKE
-  { id: 'f10x1', eventType: 'FRAME10_STRIKE', variant: 1, voice: 'reactive',    text: 'Strike all\'ultimo frame! Hai ancora due tiri.' },
+  { id: 'f10x1', eventType: 'FRAME10_STRIKE', variant: 1, voice: 'reactive',    text: 'Strike nel frame 10 — guadagni altri due tiri.' },
   { id: 'f10x2', eventType: 'FRAME10_STRIKE', variant: 2, voice: 'encouraging', text: 'Perfetto, continua così.' },
   { id: 'f10x3', eventType: 'FRAME10_STRIKE', variant: 3, voice: 'educational', text: 'Nel frame 10 lo strike ti dà due tiri extra — senza bonus aggiuntivi sul punteggio.' },
 
@@ -112,7 +112,7 @@ export const MESSAGES: Message[] = [
   { id: 'f10sp3', eventType: 'FRAME10_SPARE', variant: 3, voice: 'educational', text: 'Lo spare al frame 10 ti dà un tiro in più — vale solo i birilli che abbatti.' },
 
   // FRAME10_FINAL
-  { id: 'f10f1', eventType: 'FRAME10_FINAL', variant: 1, voice: 'reactive',    text: 'Ultimo tiro della partita! Chiudi in grande.' },
+  { id: 'f10f1', eventType: 'FRAME10_FINAL', variant: 1, voice: 'reactive',    text: 'Ultimo tiro: ogni birillo conta sul totale finale.' },
   { id: 'f10f2', eventType: 'FRAME10_FINAL', variant: 2, voice: 'encouraging', text: 'Dai tutto quello che hai.' },
   { id: 'f10f3', eventType: 'FRAME10_FINAL', variant: 3, voice: 'educational', text: 'Ogni birillo che abbatti adesso si aggiunge direttamente al tuo totale finale.' },
 
