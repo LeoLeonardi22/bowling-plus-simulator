@@ -56,6 +56,11 @@ export const MESSAGES: Message[] = [
   { id: 'sc2', eventType: 'STRIKE_COMEBACK', variant: 2, voice: 'encouraging', text: 'La rimonta inizia così: uno strike e il terreno si recupera in fretta.' },
   { id: 'sc3', eventType: 'STRIKE_COMEBACK', variant: 3, voice: 'educational', text: 'Uno strike dopo frame aperti vale doppio emotivamente — e cambia il ritmo del punteggio cumulativo.' },
 
+  // STRIKE_NORMAL
+  { id: 'strn1', eventType: 'STRIKE_NORMAL', variant: 1, voice: 'reactive',    text: 'Strike! Tutti giù al primo tiro — il punteggio ringrazia.' },
+  { id: 'strn2', eventType: 'STRIKE_NORMAL', variant: 2, voice: 'encouraging', text: 'Ottimo strike — i prossimi due tiri si sommano anche qui. Continua così.' },
+  { id: 'strn3', eventType: 'STRIKE_NORMAL', variant: 3, voice: 'educational', text: 'Strike: il frame vale 10 più i tuoi prossimi due tiri. Il punteggio definitivo arriverà tra poco.' },
+
   // STRIKE_PERFECT_PATH
   { id: 'spp1', eventType: 'STRIKE_PERFECT_PATH', variant: 1, voice: 'reactive',    text: 'Stai percorrendo una strada rarissima — ogni strike è un passo verso qualcosa di storico.' },
   { id: 'spp2', eventType: 'STRIKE_PERFECT_PATH', variant: 2, voice: 'encouraging', text: 'Concentrazione totale. Non pensare al risultato — pensa solo al prossimo tiro.' },
@@ -111,6 +116,16 @@ export const MESSAGES: Message[] = [
   { id: 'f10sp2', eventType: 'FRAME10_SPARE', variant: 2, voice: 'encouraging', text: 'Benissimo! Un ultimo colpo per concludere questa partita nel modo migliore.' },
   { id: 'f10sp3', eventType: 'FRAME10_SPARE', variant: 3, voice: 'educational', text: 'Lo spare al frame 10 ti dà un tiro bonus — vale esattamente i birilli che abbatti.' },
 
+  // FRAME10_STRIKE2
+  { id: 'f10x2_1', eventType: 'FRAME10_STRIKE2', variant: 1, voice: 'reactive',    text: 'Due strike di fila al frame 10! Hai ancora un tiro per chiudere in grande.' },
+  { id: 'f10x2_2', eventType: 'FRAME10_STRIKE2', variant: 2, voice: 'encouraging', text: 'Fantastico! Secondo strike consecutivo — un altro colpo e la partita è chiusa al meglio.' },
+  { id: 'f10x2_3', eventType: 'FRAME10_STRIKE2', variant: 3, voice: 'educational', text: 'Due strike al frame 10 — ogni tiro vale esattamente quello che abbatti. Nessun bonus aggiuntivo.' },
+
+  // FRAME10_AFTER_STRIKE
+  { id: 'f10as1', eventType: 'FRAME10_AFTER_STRIKE', variant: 1, voice: 'reactive',    text: '{pins} pin — hai ancora un tiro. Chiudi con tutto quello che hai.' },
+  { id: 'f10as2', eventType: 'FRAME10_AFTER_STRIKE', variant: 2, voice: 'encouraging', text: 'Bene — un ultimo tiro per portare a casa il massimo da questo frame.' },
+  { id: 'f10as3', eventType: 'FRAME10_AFTER_STRIKE', variant: 3, voice: 'educational', text: 'Al frame 10 ogni birillo vale direttamente sul totale. Dai tutto nell\'ultimo tiro.' },
+
   // FRAME10_FINAL
   { id: 'f10f1', eventType: 'FRAME10_FINAL', variant: 1, voice: 'reactive',    text: 'Ultimo tiro della partita — ogni birillo adesso pesa sul totale finale.' },
   { id: 'f10f2', eventType: 'FRAME10_FINAL', variant: 2, voice: 'encouraging', text: 'È il momento. Dai tutto quello che hai — la pista ti aspetta.' },
@@ -130,6 +145,10 @@ export const MESSAGES: Message[] = [
   { id: 'l1_ctx_strike', eventType: 'LOW_1_3', variant: 1, voice: 'reactive',
     contextMatch: { prevFrameResult: 'strike' },
     text: 'Dopo lo strike, pochi pin al primo — non perdere la concentrazione. Lo spare è ancora possibile.' },
+
+  { id: 'of1_ctx_strike', eventType: 'OPEN_FRAME', variant: 1, voice: 'educational',
+    contextMatch: { prevFrameResult: 'strike' },
+    text: 'Il bonus strike si chiude qui: {pinsFirstThrow} + {pins} = {sum}. Al prossimo si torna freschi.' },
 
   { id: 'of1_ctx_spare', eventType: 'OPEN_FRAME', variant: 1, voice: 'reactive',
     contextMatch: { prevFrameResult: 'spare' },

@@ -23,6 +23,7 @@ export interface GameContext {
   hasHadStrike: boolean;
   hasHadSpare: boolean;
   hasHadGutter: boolean;
+  recentGutter: boolean;
   lowSeriesCount: number;
   isPerfectGamePath: boolean;
   prevFrameResult: FrameResult | null;
@@ -41,6 +42,7 @@ export type EventType =
   | 'STRIKE_DOUBLE'
   | 'STRIKE_TURKEY'
   | 'STRIKE_MULTI'
+  | 'STRIKE_NORMAL'
   | 'STRIKE_COMEBACK'
   | 'STRIKE_PERFECT_PATH'
   | 'GUTTER_AFTER_GUTTER'
@@ -53,6 +55,8 @@ export type EventType =
   | 'FRAME10_START'
   | 'FRAME10_STRIKE'
   | 'FRAME10_SPARE'
+  | 'FRAME10_STRIKE2'
+  | 'FRAME10_AFTER_STRIKE'
   | 'FRAME10_FINAL'
   | 'LOW_SERIES'
   | 'PERFECT_GAME_PATH';

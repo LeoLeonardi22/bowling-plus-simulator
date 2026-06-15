@@ -49,6 +49,9 @@ export function buildContext(
     currentFrame >= 7 &&
     completedFrames.filter(f => f.frameNumber >= 1).every(f => f.isStrike);
 
+  const last3 = completedFrames.slice(-3);
+  const recentGutter = last3.some(f => f.throws.some(t => t === 0));
+
   return {
     frameNumber: currentFrame,
     throwInFrame,
@@ -58,6 +61,7 @@ export function buildContext(
     hasHadStrike,
     hasHadSpare,
     hasHadGutter,
+    recentGutter,
     lowSeriesCount,
     isPerfectGamePath,
     prevFrameResult,
