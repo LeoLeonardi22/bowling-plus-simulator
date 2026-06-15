@@ -10,6 +10,7 @@ function matchesContext(match: MessageContextMatch, ctx: GameContext): boolean {
   if (match.phase !== undefined && match.phase !== ctx.phase) return false;
   if (match.pinsFirstThrowMin !== undefined && ctx.pinsFirstThrow < match.pinsFirstThrowMin) return false;
   if (match.pinsFirstThrowMax !== undefined && ctx.pinsFirstThrow > match.pinsFirstThrowMax) return false;
+  if (match.isSplit !== undefined && match.isSplit !== ctx.isSplit) return false;
   return true;
 }
 

@@ -65,6 +65,7 @@ export interface MessageContextMatch {
   phase?: GamePhase;
   pinsFirstThrowMin?: number;
   pinsFirstThrowMax?: number;
+  isSplit?: boolean;
 }
 
 export interface Message {

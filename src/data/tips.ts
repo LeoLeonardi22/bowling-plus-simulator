@@ -24,7 +24,7 @@ export const TIPS: string[] = [
   'Non cercare subito l\'hook. Prima impara il lancio dritto, poi aggiungi tecnica.',
   'Non rischiare il 2° lancio se hai già abbattuto quasi tutto. La spare è matematicamente meglio.',
   'Respira prima di ogni lancio. Il ritmo mentale è importante quanto quello fisico.',
-  'Dopo un brutto lancio, prima di avvicinarti, chiediti cosa è cambiato.',
+  'Dopo un brutto lancio, prima di riprendere chiediti: ho cambiato velocità? Ho rilasciato troppo tardi? Trovare la causa aiuta a correggere.',
   'Non guardare dove finisce la palla mentre cammini. Prima finisci il gesto.',
   'Crea una routine e ripetila ogni volta: stessa posizione, stesso respiro.',
   'Non copiare lo stile di altri giocatori. Osserva e prendi spunti, ma i corpi sono diversi.',

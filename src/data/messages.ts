@@ -7,8 +7,8 @@ export const MESSAGES: Message[] = [
   { id: 'gf3', eventType: 'GUTTER_FIRST', variant: 3, voice: 'educational',  text: 'La pista è più insidiosa di quanto sembra. Prova a tenere la palla al centro.' },
 
   // GUTTER_REPEATED
-  { id: 'gr1', eventType: 'GUTTER_REPEATED', variant: 1, voice: 'reactive',    text: 'Ancora nessun birillo, ma ogni tiro è una nuova chance.' },
-  { id: 'gr2', eventType: 'GUTTER_REPEATED', variant: 2, voice: 'encouraging', text: 'Non mollare, la palla trova la strada.' },
+  { id: 'gr1', eventType: 'GUTTER_REPEATED', variant: 1, voice: 'reactive',    text: 'Mannaggia, ancora nel canale! Dai, riprova — hai ancora un tiro.' },
+  { id: 'gr2', eventType: 'GUTTER_REPEATED', variant: 2, voice: 'encouraging', text: 'La palla ha trovato il canale di nuovo — succede! Riprendi la mira al prossimo.' },
   { id: 'gr3', eventType: 'GUTTER_REPEATED', variant: 3, voice: 'educational', text: 'Prova a tenere la palla più al centro della pista.' },
 
   // LOW_1_3
@@ -22,7 +22,7 @@ export const MESSAGES: Message[] = [
   { id: 'm3', eventType: 'MEDIUM_4_6', variant: 3, voice: 'educational', text: 'Se chiudi con uno spare, il frame vale 10 più il tiro successivo.' },
 
   // HIGH_7_9
-  { id: 'h1', eventType: 'HIGH_7_9', variant: 1, voice: 'reactive',    text: 'Ottimo tiro! Sei vicinissimo allo spare.' },
+  { id: 'h1', eventType: 'HIGH_7_9', variant: 1, voice: 'reactive',    text: 'Ottimo tiro! Ne mancano pochissimi al secondo.' },
   { id: 'h2', eventType: 'HIGH_7_9', variant: 2, voice: 'encouraging', text: 'Ne mancano pochissimi, concentrati sul secondo.' },
   { id: 'h3', eventType: 'HIGH_7_9', variant: 3, voice: 'educational', text: 'Con uno spare il frame vale 10 più il prossimo tiro.' },
 
@@ -154,6 +154,14 @@ export const MESSAGES: Message[] = [
   { id: 'of3_ctx_warm', eventType: 'OPEN_FRAME', variant: 3, voice: 'encouraging',
     contextMatch: { pinsFirstThrowMin: 7 },
     text: 'Hai abbattuto parecchi pin — niente spare questa volta, ma il punteggio conta lo stesso.' },
+
+  { id: 'h1_ctx_split', eventType: 'HIGH_7_9', variant: 1, voice: 'reactive',
+    contextMatch: { isSplit: true },
+    text: 'Tanti pin abbattuti ma è uno split — la situazione è complicata. Prova lo stesso.' },
+
+  { id: 'sn1_ctx_strike', eventType: 'SPARE_NORMAL', variant: 1, voice: 'educational',
+    contextMatch: { prevFrameResult: 'strike' },
+    text: 'Spare! E hai fatto strike prima — quel frame si chiude adesso: 10 più questo tiro.' },
 ];
 
 export function getMessagesForEvent(eventType: string): Message[] {
