@@ -98,7 +98,7 @@ export const MESSAGES: Message[] = [
 
   // FRAME10_START
   { id: 'f10s1', eventType: 'FRAME10_START', variant: 1, voice: 'reactive',    text: 'Eccoci all\'ultimo frame! La partita si decide qui — dai tutto.' },
-  { id: 'f10s2', eventType: 'FRAME10_START', variant: 2, voice: 'encouraging', text: 'Frame 10: strike = altri due tiri, spare = ancora uno. Ogni colpo adesso pesa sul totale.' },
+  { id: 'f10s2', eventType: 'FRAME10_START', variant: 2, voice: 'encouraging', text: 'Siamo all\'ultimo frame — ogni birillo adesso va dritto sul totale finale.' },
   { id: 'f10s3', eventType: 'FRAME10_START', variant: 3, voice: 'educational', text: 'Al frame 10 non ci sono bonus: ogni birillo abbattuto vale esattamente quello che è.' },
 
   // FRAME10_STRIKE
