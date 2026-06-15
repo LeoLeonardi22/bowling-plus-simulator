@@ -1,8 +1,8 @@
 export const TIPS: string[] = [
   'Scegli una palla adatta a te — in pista trovi palle dalle 6 alle 16 libbre. Parti leggera e aumenta gradualmente.',
-  'Infila il pollice fino in fondo, medio e anulare solo fino alla seconda nocca.',
+  'La pallina ha tre fori: pollice tutto dentro, medio e anulare solo fino alla seconda nocca. Così hai presa senza stringere.',
   'Tieni la palla con la minima pressione necessaria. Non stringere.',
-  'Le scarpe da bowling hanno la suola studiata per lo slancio finale. Usale quando puoi.',
+  'Le scarpe da bowling hanno la suola scivolosa sul piede di lancio — ti permettono di scivolare nel passo finale senza inciampare.',
   'Parti in posizione eretta, spalle rilassate. Non piegarti prima di muoverti.',
   'Destrorso: il primo passo è col piede destro. Mancino: col sinistro.',
   'Cammina in linea retta verso i birilli, non in diagonale.',

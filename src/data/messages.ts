@@ -3,7 +3,7 @@ import type { Message } from '../engine/types';
 export const MESSAGES: Message[] = [
   // GUTTER_FIRST
   { id: 'gf1', eventType: 'GUTTER_FIRST', variant: 1, voice: 'reactive',     text: 'Capita! La direzione si aggiusta al prossimo tiro.' },
-  { id: 'gf2', eventType: 'GUTTER_FIRST', variant: 2, voice: 'encouraging',  text: 'Zero birilli, ma il secondo tiro è tutto tuo.' },
+  { id: 'gf2', eventType: 'GUTTER_FIRST', variant: 2, voice: 'encouraging',  text: 'Zero birilli — non preoccuparti, il secondo andrà meglio.' },
   { id: 'gf3', eventType: 'GUTTER_FIRST', variant: 3, voice: 'educational',  text: 'La pista è più insidiosa di quanto sembra. Prova a tenere la palla al centro.' },
 
   // GUTTER_REPEATED
@@ -12,7 +12,7 @@ export const MESSAGES: Message[] = [
   { id: 'gr3', eventType: 'GUTTER_REPEATED', variant: 3, voice: 'educational', text: 'Prova a tenere la palla più al centro della pista.' },
 
   // LOW_1_3
-  { id: 'l1', eventType: 'LOW_1_3', variant: 1, voice: 'reactive',    text: 'Pochi pin al primo tiro — il secondo è tutto tuo.' },
+  { id: 'l1', eventType: 'LOW_1_3', variant: 1, voice: 'reactive',    text: 'Pochi pin al primo — prendi la mira e prova a chiudere.' },
   { id: 'l2', eventType: 'LOW_1_3', variant: 2, voice: 'encouraging', text: 'Ne sono rimasti tanti, prendi bene la mira.' },
   { id: 'l3', eventType: 'LOW_1_3', variant: 3, voice: 'educational', text: 'Ogni birillo conta — la somma dei due tiri è il tuo punteggio del frame.' },
 
@@ -67,13 +67,13 @@ export const MESSAGES: Message[] = [
   { id: 'gg3', eventType: 'GUTTER_AFTER_GUTTER', variant: 3, voice: 'educational', text: 'Con 0+0 il frame vale zero — ogni nuovo frame è però una pagina bianca.' },
 
   // MISSED_SPARE
-  { id: 'ms1', eventType: 'MISSED_SPARE', variant: 1, voice: 'reactive',    text: 'Peccato! Eri così vicino allo spare.' },
+  { id: 'ms1', eventType: 'MISSED_SPARE', variant: 1, voice: 'reactive',    text: 'Peccato! La prossima volta ce la fai.' },
   { id: 'ms2', eventType: 'MISSED_SPARE', variant: 2, voice: 'encouraging', text: 'La prossima volta ce la fai, sei sulla strada giusta.' },
   { id: 'ms3', eventType: 'MISSED_SPARE', variant: 3, voice: 'educational', text: 'Senza spare il frame vale solo i birilli del primo tiro — nessun bonus.' },
 
   // OPEN_FRAME
-  { id: 'of1', eventType: 'OPEN_FRAME', variant: 1, voice: 'reactive',    text: 'Frame chiuso. Al prossimo si riparte.' },
-  { id: 'of2', eventType: 'OPEN_FRAME', variant: 2, voice: 'encouraging', text: 'Nessun bonus questa volta — riparte tutto dal prossimo frame.' },
+  { id: 'of1', eventType: 'OPEN_FRAME', variant: 1, voice: 'reactive',    text: 'Frame terminato — al prossimo si riprova.' },
+  { id: 'of2', eventType: 'OPEN_FRAME', variant: 2, voice: 'encouraging', text: 'Nessun strike né spare — il punteggio è solo la somma dei due tiri.' },
   { id: 'of3', eventType: 'OPEN_FRAME', variant: 3, voice: 'educational', text: 'Senza spare il punteggio è la somma dei due tiri — nessun bonus, ma conta lo stesso.' },
 
   // SPARE_FIRST
@@ -125,6 +125,23 @@ export const MESSAGES: Message[] = [
   { id: 'pgp1', eventType: 'PERFECT_GAME_PATH', variant: 1, voice: 'reactive',    text: 'Stai per fare qualcosa di straordinario!' },
   { id: 'pgp2', eventType: 'PERFECT_GAME_PATH', variant: 2, voice: 'encouraging', text: 'Concentrazione massima, ci sei quasi.' },
   { id: 'pgp3', eventType: 'PERFECT_GAME_PATH', variant: 3, voice: 'educational', text: 'Un perfect game è 300 punti: 12 strike consecutivi — uno degli obiettivi più rari del bowling.' },
+
+  // Messaggi contestuali
+  { id: 'l1_ctx_strike', eventType: 'LOW_1_3', variant: 1, voice: 'reactive',
+    contextMatch: { prevFrameResult: 'strike' },
+    text: 'Dopo lo strike, pochi pin al primo — riprendi la concentrazione sul secondo.' },
+
+  { id: 'of1_ctx_spare', eventType: 'OPEN_FRAME', variant: 1, voice: 'reactive',
+    contextMatch: { prevFrameResult: 'spare' },
+    text: 'Avevi lo spare prima — questo frame è andato diversamente. Si riparte.' },
+
+  { id: 'ms1_ctx_low', eventType: 'MISSED_SPARE', variant: 1, voice: 'reactive',
+    contextMatch: { pinsFirstThrowMax: 5 },
+    text: 'Con pochi pin al primo tiro era difficile chiudere — al prossimo frame.' },
+
+  { id: 'ls1_ctx_improving', eventType: 'LOW_SERIES', variant: 1, voice: 'encouraging',
+    contextMatch: { pinsFirstThrowMin: 6 },
+    text: 'Stai andando meglio — continua su questa strada.' },
 ];
 
 export function getMessagesForEvent(eventType: string): Message[] {

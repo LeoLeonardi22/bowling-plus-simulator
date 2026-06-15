@@ -58,12 +58,22 @@ export type EventType =
 
 export type MessageVoice = 'reactive' | 'encouraging' | 'educational';
 
+export interface MessageContextMatch {
+  prevFrameResult?: FrameResult | null;
+  hasHadStrike?: boolean;
+  hasHadSpare?: boolean;
+  phase?: GamePhase;
+  pinsFirstThrowMin?: number;
+  pinsFirstThrowMax?: number;
+}
+
 export interface Message {
   id: string;
   eventType: EventType;
   variant: 1 | 2 | 3;
   text: string;
   voice: MessageVoice;
+  contextMatch?: MessageContextMatch;
 }
 
 export interface GameEvent {
