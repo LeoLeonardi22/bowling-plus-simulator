@@ -16,11 +16,13 @@ export function buildContext(
   let streakSpare = 0;
   let hasHadStrike = false;
   let hasHadSpare = false;
+  let hasHadGutter = false;
   let lowSeriesCount = 0;
   let prevFrameResult: GameContext['prevFrameResult'] = null;
   let consecutiveLow = 0;
 
   for (const f of completedFrames) {
+    if (f.throws.some(t => t === 0)) hasHadGutter = true;
     if (f.isStrike) {
       hasHadStrike = true;
       streakStrike++;
@@ -55,6 +57,7 @@ export function buildContext(
     streakSpare,
     hasHadStrike,
     hasHadSpare,
+    hasHadGutter,
     lowSeriesCount,
     isPerfectGamePath,
     prevFrameResult,

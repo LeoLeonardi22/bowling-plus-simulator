@@ -1,7 +1,7 @@
 import type { EventType, GameContext, GameEvent } from './types';
 
 export function detectEvent(pins: number, context: GameContext): GameEvent {
-  const { frameNumber, throwInFrame, streakStrike, hasHadStrike, hasHadSpare,
+  const { frameNumber, throwInFrame, streakStrike, hasHadStrike, hasHadSpare, hasHadGutter,
     lowSeriesCount, isPerfectGamePath, isSplit, pinsFirstThrow } = context;
 
   let type: EventType;
@@ -28,7 +28,7 @@ export function detectEvent(pins: number, context: GameContext): GameEvent {
       else if (isPerfectGamePath) type = 'STRIKE_PERFECT_PATH';
       else type = 'STRIKE_FIRST';
     } else if (pins === 0) {
-      type = hasHadStrike || hasHadSpare ? 'GUTTER_REPEATED' : 'GUTTER_FIRST';
+      type = hasHadGutter ? 'GUTTER_REPEATED' : 'GUTTER_FIRST';
     } else if (isSplit) {
       type = 'SPLIT';
     } else if (pins <= 3) {

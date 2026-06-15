@@ -22,6 +22,7 @@ export interface GameContext {
   streakSpare: number;
   hasHadStrike: boolean;
   hasHadSpare: boolean;
+  hasHadGutter: boolean;
   lowSeriesCount: number;
   isPerfectGamePath: boolean;
   prevFrameResult: FrameResult | null;

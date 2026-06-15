@@ -162,6 +162,14 @@ export const MESSAGES: Message[] = [
   { id: 'sn1_ctx_strike', eventType: 'SPARE_NORMAL', variant: 1, voice: 'educational',
     contextMatch: { prevFrameResult: 'strike' },
     text: 'SPARE! E hai fatto strike prima — quel frame si chiude adesso: vale 10 più questo tiro che hai appena fatto.' },
+
+  { id: 'sn3_ctx_early', eventType: 'SPARE_NORMAL', variant: 3, voice: 'educational',
+    contextMatch: { phase: 'early' },
+    text: 'Spare! Tutti i birilli in due tiri — il tuo prossimo tiro si aggiunge come bonus: 10 + ?.' },
+
+  { id: 'sf3_ctx_early', eventType: 'STRIKE_FIRST', variant: 3, voice: 'educational',
+    contextMatch: { phase: 'early' },
+    text: 'Strike! Tutti i birilli al primo tiro — il frame vale 10 + i prossimi due tiri: 10 + ? + ?. Il punteggio lo scopri dopo.' },
 ];
 
 export function getMessagesForEvent(eventType: string): Message[] {
