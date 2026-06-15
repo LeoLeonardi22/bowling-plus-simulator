@@ -2,14 +2,14 @@ type IncipitFn = (frame: number) => string;
 
 export const INCIPITS: Record<'strike' | 'spare' | 'open', IncipitFn[]> = {
   strike: [
-    _f => `Strike al frame precedente! I tuoi prossimi due tiri si sommano lì.`,
-    f => `Hai fatto strike — ogni birillo del frame ${f} vale anche per quello prima.`,
-    f => `Strike! Frame ${f} — i prossimi due tiri aumentano il punteggio precedente.`,
+    _f => `Hai fatto strike — i tuoi prossimi due tiri si sommano al frame precedente.`,
+    f  => `Strike nel frame precedente! Ogni birillo del frame ${f} vale anche lì.`,
+    _f => `Hai fatto strike — il punteggio del frame prima cresce con i prossimi due tiri.`,
   ],
   spare: [
-    _f => `Spare! Il tuo prossimo tiro si aggiunge al frame precedente — vai.`,
-    f => `Ottimo spare — il primo tiro del frame ${f} vale doppio.`,
-    f => `Spare chiuso. Frame ${f}: il prossimo tiro conta anche per prima.`,
+    _f => `Hai fatto spare — il tuo prossimo tiro si aggiunge al frame precedente.`,
+    f  => `Spare nel frame precedente! Il primo tiro del frame ${f} vale doppio.`,
+    _f => `Hai fatto spare — il prossimo tiro conta anche per il frame prima.`,
   ],
   open: [
     f => `Frame ${f} — nuova occasione, nuovo tiro.`,
