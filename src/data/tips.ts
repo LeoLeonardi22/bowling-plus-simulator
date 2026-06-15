@@ -1,6 +1,6 @@
 export const TIPS: string[] = [
   'Scegli una palla adatta a te — in pista trovi palle dalle 6 alle 16 libbre. Parti leggera e aumenta gradualmente.',
-  'La pallina ha tre fori: pollice tutto dentro, medio e anulare solo fino alla seconda nocca. Così hai presa senza stringere.',
+  'La boccia ha tre fori: pollice tutto dentro, medio e anulare solo fino alla seconda nocca. Così hai presa senza stringere.',
   'Tieni la palla con la minima pressione necessaria. Non stringere.',
   'Le scarpe da bowling hanno la suola scivolosa sul piede di lancio — ti permettono di scivolare nel passo finale senza inciampare.',
   'Parti in posizione eretta, spalle rilassate. Non piegarti prima di muoverti.',
@@ -22,7 +22,7 @@ export const TIPS: string[] = [
   'Le spare valgono di più degli strike per chi inizia. Una partita tutta spare vale circa 190 punti.',
   'Per la spare mira sempre al birillo davanti tra quelli rimasti.',
   'Non cercare subito l\'hook. Prima impara il lancio dritto, poi aggiungi tecnica.',
-  'Non rischiare il 2° lancio se hai già abbattuto quasi tutto. La spare è matematicamente meglio.',
+  'Per le spare punta sempre al birillo davanti tra quelli rimasti — abbatterlo trascina spesso gli altri.',
   'Respira prima di ogni lancio. Il ritmo mentale è importante quanto quello fisico.',
   'Dopo un brutto lancio, prima di riprendere chiediti: ho cambiato velocità? Ho rilasciato troppo tardi? Trovare la causa aiuta a correggere.',
   'Non guardare dove finisce la palla mentre cammini. Prima finisci il gesto.',
