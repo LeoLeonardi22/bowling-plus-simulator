@@ -67,6 +67,7 @@ export interface MessageContextMatch {
   pinsFirstThrowMin?: number;
   pinsFirstThrowMax?: number;
   isSplit?: boolean;
+  streakStrike?: number;
 }
 
 export interface Message {

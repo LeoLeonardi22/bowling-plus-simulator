@@ -72,7 +72,7 @@ export const MESSAGES: Message[] = [
   { id: 'ms3', eventType: 'MISSED_SPARE', variant: 3, voice: 'educational', text: 'Senza spare il frame vale solo i birilli del primo tiro — nessun bonus. Ma ogni frame è una nuova opportunità.' },
 
   // OPEN_FRAME
-  { id: 'of1', eventType: 'OPEN_FRAME', variant: 1, voice: 'reactive',    text: 'Frame chiuso senza bonus — ma ogni punto conta. Al prossimo si reimposta tutto.' },
+  { id: 'of1', eventType: 'OPEN_FRAME', variant: 1, voice: 'reactive',    text: 'Frame chiuso senza bonus: {pinsFirstThrow} + {pins} = {sum}. Si riparte.' },
   { id: 'of2', eventType: 'OPEN_FRAME', variant: 2, voice: 'encouraging', text: 'Nessuno strike né spare — il punteggio è la somma dei due tiri. Si riparte con l\'energia giusta.' },
   { id: 'of3', eventType: 'OPEN_FRAME', variant: 3, voice: 'educational', text: 'Senza spare il frame vale solo la somma dei due tiri — il totale si costruisce frame dopo frame.' },
 
@@ -137,7 +137,7 @@ export const MESSAGES: Message[] = [
 
   { id: 'ms1_ctx_low', eventType: 'MISSED_SPARE', variant: 1, voice: 'reactive',
     contextMatch: { pinsFirstThrowMax: 5 },
-    text: 'Con pochi pin al primo tiro era una situazione difficile. Al prossimo frame si riparte con più spazio.' },
+    text: 'Hai totalizzato {sum} punti — pochi, ma ogni pin costruisce il totale. Avanti!' },
 
   { id: 'ls1_ctx_improving', eventType: 'LOW_SERIES', variant: 1, voice: 'encouraging',
     contextMatch: { pinsFirstThrowMin: 6 },
@@ -170,6 +170,26 @@ export const MESSAGES: Message[] = [
   { id: 'sf3_ctx_early', eventType: 'STRIKE_FIRST', variant: 3, voice: 'educational',
     contextMatch: { phase: 'early' },
     text: 'Strike! Tutti i birilli al primo tiro — il frame vale 10 + i prossimi due tiri: 10 + ? + ?. Il punteggio lo scopri dopo.' },
+
+  { id: 'l1_ctx_spare', eventType: 'LOW_1_3', variant: 1, voice: 'educational',
+    contextMatch: { prevFrameResult: 'spare' },
+    text: 'Il frame spare precedente si chiude: 10 + {pins} = {spareBonus}. Ora punta allo spare!' },
+
+  { id: 'm1_ctx_spare', eventType: 'MEDIUM_4_6', variant: 1, voice: 'educational',
+    contextMatch: { prevFrameResult: 'spare' },
+    text: 'Questo tiro chiude il bonus spare di prima: 10 + {pins} = {spareBonus}. E hai ancora il secondo tiro!' },
+
+  { id: 'h1_ctx_spare', eventType: 'HIGH_7_9', variant: 1, voice: 'educational',
+    contextMatch: { prevFrameResult: 'spare' },
+    text: 'Ottimo! E chiude anche il bonus spare precedente: 10 + {pins} = {spareBonus}. Quasi spare!' },
+
+  { id: 'l1_ctx_dbl_strike', eventType: 'LOW_1_3', variant: 1, voice: 'educational',
+    contextMatch: { streakStrike: 2 },
+    text: 'Dopo due strike, questo tiro ({pins}) si aggiunge a entrambi i frame precedenti. Il secondo tiro chiuderà uno dei due.' },
+
+  { id: 'm1_ctx_dbl_strike', eventType: 'MEDIUM_4_6', variant: 1, voice: 'educational',
+    contextMatch: { streakStrike: 2 },
+    text: 'Hai due strike — questo tiro ({pins}) si somma a entrambi. Il frame finale si chiude dopo il prossimo.' },
 ];
 
 export function getMessagesForEvent(eventType: string): Message[] {

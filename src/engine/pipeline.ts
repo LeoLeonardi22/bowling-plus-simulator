@@ -11,7 +11,17 @@ function matchesContext(match: MessageContextMatch, ctx: GameContext): boolean {
   if (match.pinsFirstThrowMin !== undefined && ctx.pinsFirstThrow < match.pinsFirstThrowMin) return false;
   if (match.pinsFirstThrowMax !== undefined && ctx.pinsFirstThrow > match.pinsFirstThrowMax) return false;
   if (match.isSplit !== undefined && match.isSplit !== ctx.isSplit) return false;
+  if (match.streakStrike !== undefined && ctx.streakStrike < match.streakStrike) return false;
   return true;
+}
+
+function resolveText(text: string, ctx: GameContext, pins: number): string {
+  const sum = ctx.pinsFirstThrow + pins;
+  return text
+    .replace(/\{pins\}/g, String(pins))
+    .replace(/\{pinsFirstThrow\}/g, String(ctx.pinsFirstThrow))
+    .replace(/\{sum\}/g, String(sum))
+    .replace(/\{spareBonus\}/g, String(10 + pins));
 }
 
 export function selectMessage(event: GameEvent): Message {
@@ -30,7 +40,8 @@ export function selectMessage(event: GameEvent): Message {
   const counterKey = contextPool.length > 0 ? `${event.type}:ctx` : event.type;
   const count = variantCounters[counterKey] ?? 0;
   variantCounters[counterKey] = count + 1;
-  return pool[count % pool.length];
+  const msg = pool[count % pool.length];
+  return { ...msg, text: resolveText(msg.text, event.context, event.pins) };
 }
 
 export function resetPipeline(): void {
