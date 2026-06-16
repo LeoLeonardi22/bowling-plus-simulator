@@ -12,12 +12,12 @@ export const MESSAGES: Message[] = [
   { id: 'gr3', eventType: 'GUTTER_REPEATED', variant: 3, voice: 'educational', text: 'Quando la palla finisce nel canale, il problema è spesso la direzione di partenza. Punta le frecce sul pavimento.' },
 
   // LOW_1_3
-  { id: 'l1', eventType: 'LOW_1_3', variant: 1, voice: 'reactive',    text: 'Pochi birilli al primo — ma il frame non è finito. Con il secondo puoi ancora chiudere lo spare!' },
+  { id: 'l1', eventType: 'LOW_1_3', variant: 1, voice: 'reactive',    text: 'Pochi birilli al primo, ma il frame non è finito. Con il secondo puoi ancora chiudere lo spare!' },
   { id: 'l2', eventType: 'LOW_1_3', variant: 2, voice: 'encouraging', text: 'Ne sono rimasti tanti — prenditi il tempo, mira con cura e dagli dentro.' },
   { id: 'l3', eventType: 'LOW_1_3', variant: 3, voice: 'educational', text: 'Anche con pochi pin al primo, se chiudi lo spare il frame vale 10 più il prossimo tiro. Vale la pena provarci.' },
 
   // MEDIUM_4_6
-  { id: 'm1', eventType: 'MEDIUM_4_6', variant: 1, voice: 'reactive',    text: 'Metà pista abbattuta — adesso la vera sfida è lo spare. Punta al birillo davanti tra quelli rimasti.' },
+  { id: 'm1', eventType: 'MEDIUM_4_6', variant: 1, voice: 'reactive',    text: 'Metà pista abbattuta. Adesso la vera sfida è lo spare: punta al birillo davanti tra quelli rimasti.' },
   { id: 'm2', eventType: 'MEDIUM_4_6', variant: 2, voice: 'encouraging', text: 'Buona base! Lo spare è lì, a portata di tiro — non mollare.' },
   { id: 'm3', eventType: 'MEDIUM_4_6', variant: 3, voice: 'educational', text: 'Se chiudi lo spare, questo frame vale 10 più il tiro successivo. Una bella iniezione di punteggio.' },
 
@@ -156,7 +156,7 @@ export const MESSAGES: Message[] = [
 
   { id: 'ms1_ctx_low', eventType: 'MISSED_SPARE', variant: 1, voice: 'reactive',
     contextMatch: { pinsFirstThrowMax: 5 },
-    text: 'Hai totalizzato {sum} punti — pochi, ma ogni pin costruisce il totale. Avanti!' },
+    text: 'Hai totalizzato {sum} punti. Pochi, ma ogni birillo costruisce il totale. Avanti!' },
 
   { id: 'ls1_ctx_improving', eventType: 'LOW_SERIES', variant: 1, voice: 'encouraging',
     contextMatch: { pinsFirstThrowMin: 6 },

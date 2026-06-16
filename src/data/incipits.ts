@@ -14,6 +14,6 @@ export const INCIPITS: Record<'strike' | 'spare' | 'open', IncipitFn[]> = {
   open: [
     f => `Frame ${f} — la pista aspetta. Vai.`,
     f => `Dai, frame ${f}! Ogni tiro è una storia a sé.`,
-    f => `Si riparte. Frame ${f} — concentrazione.`,
+    f => `Si riparte. Frame ${f}: concentrazione.`,
   ],
 };
