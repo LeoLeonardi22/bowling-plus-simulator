@@ -263,7 +263,6 @@ export default function App() {
       <header className="app-header">
         <h1>Bowling Plus</h1>
         <span className="app-sub">Message Pipeline Simulator</span>
-        <a href="#/jarvis" className="app-jarvis-link">Prova Jarvis →</a>
       </header>
 
       <main className="app-main">
