@@ -33,6 +33,15 @@ body {
   margin-top: 2px;
 }
 
+.app-jarvis-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #4fd1e8;
+  text-decoration: none;
+}
+.app-jarvis-link:hover { text-decoration: underline; }
+
 .app-main {
   display: flex;
   flex-direction: column;
